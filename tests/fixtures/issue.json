@@ -1,0 +1,29 @@
+{
+  "number": 123,
+  "title": "Example GPU issue",
+  "body": "GPU crashes during inference.",
+  "createdAt": "2026-10-01T10:00:00Z",
+  "closedAt": "2026-10-05T10:00:00Z",
+  "labels": {
+    "nodes": [
+      {
+        "name": "bug"
+      },
+      {
+        "name": "cuda"
+      }
+    ]
+  },
+  "closedByPullRequestsReferences": {
+    "nodes": [
+      {
+        "number": 456,
+        "mergedAt": "2026-10-04T10:00:00Z"
+      },
+      {
+        "number": 789,
+        "mergedAt": null
+      }
+    ]
+  }
+}
