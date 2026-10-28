@@ -97,6 +97,9 @@ query($owner: String!, $repo: String!, $cursor: String) {
           nodes {
             number
             mergedAt
+            repository {
+              nameWithOwner
+            }
           }
         }
       }
@@ -133,11 +136,14 @@ def write_jsonl_lines(file, issues):
     file.writelines(json.dumps(issue, ensure_ascii=False) + "\n" for issue in issues)
 
 
-def parse_issue(issue):
+def parse_issue(issue, repo_name):
     fixing_prs = []
 
     for pr in issue["closedByPullRequestsReferences"]["nodes"]:
-        if pr["mergedAt"] is not None:
+        if (
+            pr["mergedAt"] is not None
+            and pr["repository"]["nameWithOwner"].lower() == repo_name.lower()
+        ):
             fixing_prs.append(pr["number"])
 
     return {
@@ -206,6 +212,7 @@ def run(settings):
         "Content-Type": "application/json",
     }
 
+    repo_name = f"{settings.owner}/{settings.repo}"
     issue_count = 0
     state_reasons = Counter()
     cursor = None
@@ -241,7 +248,8 @@ def run(settings):
                 state_reasons[issue["stateReason"]] += 1
 
             write_jsonl_lines(
-                output_file, (parse_issue(issue) for issue in issues["nodes"])
+                output_file,
+                (parse_issue(issue, repo_name) for issue in issues["nodes"]),
             )
             issue_count += len(issues["nodes"])
 

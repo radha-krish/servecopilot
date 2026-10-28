@@ -21,11 +21,17 @@
     "nodes": [
       {
         "number": 456,
-        "mergedAt": "2026-10-04T10:00:00Z"
+        "mergedAt": "2026-10-04T10:00:00Z",
+        "repository": {
+          "nameWithOwner": "vllm-project/vllm"
+        }
       },
       {
         "number": 789,
-        "mergedAt": null
+        "mergedAt": null,
+        "repository": {
+          "nameWithOwner": "vllm-project/vllm"
+        }
       }
     ]
   }
