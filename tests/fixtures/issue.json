@@ -4,7 +4,9 @@
   "body": "GPU crashes during inference.",
   "createdAt": "2026-10-01T10:00:00Z",
   "closedAt": "2026-10-05T10:00:00Z",
+  "stateReason": "COMPLETED",
   "labels": {
+    "totalCount": 2,
     "nodes": [
       {
         "name": "bug"
@@ -15,6 +17,7 @@
     ]
   },
   "closedByPullRequestsReferences": {
+    "totalCount": 2,
     "nodes": [
       {
         "number": 456,

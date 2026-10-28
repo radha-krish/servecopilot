@@ -11,6 +11,7 @@ dependencies = [
 
 [project.scripts]
 servecopilot = "servecopilot:main"
+servecopilot-ingest = "servecopilot.ingest.fetch_sync:main"
 
 [build-system]
 requires = ["uv_build>=0.13.6,<0.14.0"]
