@@ -19,6 +19,13 @@ RATE_LIMIT_FLOOR = 100
 logger = logging.getLogger(__name__)
 
 
+def read_token():
+    token = os.getenv("GIT_API_KEY")
+    if not token:
+        raise SystemExit("GIT_API_KEY not set — add it to .env")
+    return token
+
+
 @dataclass(frozen=True)
 class Settings:
     token: str
@@ -29,10 +36,7 @@ class Settings:
 
     @classmethod
     def from_env(cls, **overrides):
-        token = os.getenv("GIT_API_KEY")
-        if not token:
-            raise SystemExit("GIT_API_KEY not set — add it to .env")
-        return cls(token=token, **overrides)
+        return cls(token=read_token(), **overrides)
 
 
 def positive_int(value):
