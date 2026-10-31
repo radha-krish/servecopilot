@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "asyncpg>=0.32.0",
     "httpx>=0.28.1",
     "python-dotenv>=1.2.4",
 ]
@@ -12,6 +13,7 @@ dependencies = [
 [project.scripts]
 servecopilot = "servecopilot:main"
 servecopilot-ingest = "servecopilot.ingest.fetch_sync:main"
+servecopilot-load = "servecopilot.ingest.load:main"
 servecopilot-fetch-prs = "servecopilot.ingest.fetch_async:main"
 
 [build-system]

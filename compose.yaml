@@ -1,0 +1,23 @@
+
+services:
+  db:
+    image: pgvector/pgvector:pg18
+    environment:
+      POSTGRES_USER: servecopilot
+      POSTGRES_PASSWORD: local_dev_password
+      POSTGRES_DB: servecopilot
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      # Runs db/*.sql only when the volume is empty (first start).
+      - ./db:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U servecopilot -d servecopilot"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  postgres_data:
