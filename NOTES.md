@@ -51,3 +51,27 @@ This is an extrapolation, not a measured result.
 - Checked by Claude (model) from issue text, PR description and changed files; GitHub comment threads not read.
 - First check found a component bug (unmapped code fell back to `tests`), fixed before committing gold_v1.
 - Reading metrics: with ~10 % component noise and 250 cases, per-component differences of a few points are noise. Small components (decoding 3, compile 2) cannot be compared at all.
+
+## Day 5 — Dense retrieval
+
+**Corpus:** 13,976 chunks: 10,000 issues, 1,983 PRs, 1,993 doc chunks (vLLM `docs/`, 248 files).
+**Model:** `BAAI/bge-small-en-v1.5` (384 dims) via sentence-transformers on Apple M4 Max (MPS), default batching.
+
+| Measurement | Result |
+|---|---|
+| Embedding throughput | 13,976 texts in 48.0 s → **290.9 texts/s** |
+| HNSW build (`m=16, ef_construction=64`) | **1.05–1.06 s** (3 builds), index size 27 MB |
+| Issue body cleaning | avg 8,337 → 4,146 chars (env dumps removed) |
+
+**Query latency** (250 gold queries, k=10, query embedding excluded; two runs):
+
+| Method | p50 (ms) | p95 (ms) | Recall@10 vs exact |
+|---|---:|---:|---:|
+| exact (no index) | 9.5–13.4 | 10.9–14.8 | 1.000 |
+| HNSW ef_search=40 | 1.25–1.35 | 1.5–1.7 | 0.987–0.989 |
+| HNSW ef_search=100 | 1.6–1.8 | 2.0–2.2 | 0.996–0.998 |
+
+- HNSW is ~7× faster than exact at 14k vectors. On a 900-row test, exact was faster (1.3 vs 2.3 ms): the index only pays off as the table grows.
+- ef_search 40 → 100 costs ~0.3–0.4 ms and recovers most missed neighbours. **Default is now 100.**
+- Recall moves slightly between index rebuilds (0.989 → 0.987): HNSW builds a slightly different graph each time.
+- "Recall vs exact" measures the index approximation only, not search quality. Quality vs gold_v1 is Day 6.
